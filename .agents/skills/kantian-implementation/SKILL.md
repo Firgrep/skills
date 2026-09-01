@@ -3,64 +3,78 @@ name: kantian-implementation
 description: Implement a feature from a settled spec, requirement by requirement, verifying each is implemented, tested, and enforced. Use after socratic-grill has produced a SPEC file, or when the user says 'build the spec' / 'implement the spec'.
 ---
 
-Read `.dev/SPEC_{{ spec_name }}.md`. This is the settled source of truth for *what* and *why*. Never re-litigate Decisions or Business Case; if something there seems wrong, always flag it to the user rather than silently overriding it.
+Read `.dev/SPEC_{{ spec_name }}.yaml`. This is the settled source of truth for *what* and *why*. Never re-litigate Decisions or Business Case; if something there seems wrong, always flag it to the user rather than silently overriding it.
 
-Never edit the `.dev/SPEC_{{ spec_name }}.md`; your job is to implement an existing spec, never to change one. The specs are immutable. If facts surface during investigation or implementation that contest or contradict what is written in the spec, flag it to the user and ask for clarification. Put this clarification as an amendment in the implementation.
+Never edit the `.dev/SPEC_{{ spec_name }}.yaml`; your job is to implement an existing spec, never to change one. The specs are immutable. If facts surface during investigation or implementation that contest or contradict what is written in the spec, flag it to the user and ask for clarification. Put this clarification as an amendment in the implementation.
 
-If `.dev/SPEC_{{ spec_name }}.md` does not exist, stop and tell the user to run `socratic-grill` first — there is no settled spec to implement against.
+If `.dev/SPEC_{{ spec_name }}.yaml` does not exist, stop and tell the user to run `socratic-grill` first — there is no settled spec to implement against.
 
-If `.dev/IMPL_{{ spec_name }}.md` does not exist, create it from the spec's Requirements table. If it already exists, resume from it rather than starting over.
+If `.dev/IMPL_{{ spec_name }}.yaml` does not exist, create it from the spec's Requirements table. If it already exists, resume from it rather than starting over.
 
-You now formulate an implementation report of how to implement the spec. Always dispatch one or several _faster, lightweight, smaller model_ sub-agents to explore and find facts about the codebase and any tools. Work the report **one task at a time**, according to Rules found in the Requirements table in order unless a Requirement depends on scaffolding another one produces (e.g. shared types, a migration) — in that case, do the dependency first and note the reorder in the report.
+You now formulate an implementation report of how to implement the spec. Always dispatch one or several _faster, lightweight, smaller model_ sub-agents to explore and find facts about the codebase and any tools. Work the report **one task at a time**, in the order the spec's `requirements` list them, unless a requirement depends on scaffolding another one produces (e.g. shared types, a migration), in that case, do the dependency first and note the reorder as `context` in the implementation file.
 
-Each Task must minimally adhere to one Requirement and should:
-1. **Implement** the behavior the Rule(s) describes.
-2. **Verify** it: write a test asserting each Scenario (Given/When/Then) tied to
-   that Rule(s), then *run* the test — don't mark Tested until it actually passes.
-   Dispatch a lightweight sub-agent to run the test suite and report results;
-   don't assume a pass. Alternatively, check whether the guarantee is structural (types, validation,
-   constraints) and not just behavior that happens to pass today. If it's only
-   incidentally true, say so and either strengthen it or flag it as an accepted
-   risk — never silently mark Enforced on a hope.
+Each task must minimally cover one ruleset (or a specific rule within one, e.g. `RULESET-2.1`) and should:
+1. **Implement** the behavior the referenced rule(s) describe.
+2. **Verify** it: write a test asserting each scenario (Given/When/Then) tied to that ruleset, then *run* it — don't set `status: VERIFIED` until it actually passes. Dispatch a lightweight sub-agent to run the test suite and report results; don't assume a pass. Alternatively, check whether the guarantee is structural (types, validation, constraints) and not just behavior that happens to pass today. If it's only incidentally true, say so and either strengthen it or flag it as an accepted risk in a `verification` entry — never silently mark `VERIFIED` on a hope.
 
-If implementing a Requirement surfaces a gap, ambiguity, or conflict the spec didn't anticipate, never resolve it by assumption. Stop and put it to the user as a new question, the same way socratic-grill surfaces decisions. Log the resolution as an amendment to the requirement.
+If implementing a task surfaces a gap, ambiguity, or conflict the spec didn't anticipate, never resolve it by assumption. Stop and put it to the user as a new question, the same way `socratic-grill` surfaces decisions. Log the resolution as an entry in that task's `amendments`.
 
-`.dev/IMPL_{{ spec_name }}.md` is a working file, git-ignored, scoped to the branch — same lifecycle as the SPEC. It is not a committed artifact.
+`.dev/IMPL_{{ spec_name }}.yaml` is a working file, git-ignored, scoped to the branch — same lifecycle as the spec. It is not a committed artifact.
 
-Check off a task's box only once it has an [IMPL] and a [VERI] entry showing the test was actually run and passed — not once code is written, and not once a test is merely present.
+Set a task's `status` to `VERIFIED` only once `impl` has at least one entry **and** `verification` has at least one entry with `result: pass` — never on the basis of code being written, or a test merely existing.
 
-Amendments are recorded only in the IMPL report; the SPEC remains the frozen record of original intent even where implementation revealed it to be wrong.
+Amendments are recorded only in the IMPL file; the spec remains the frozen record of original intent even where implementation revealed it to be wrong.
 
-```md
+Template (one task shape; `impl`, `verification`, and `amendments` start empty and are filled in only after empirical work — never from intention or memory of what should have happened):
 
-# {{ spec_name }} Implementation
+```yaml
+impl_name: IMPL_<feature-name>
 
-<!-- Compile a list of actionable tasks reasoned out from the spec alone, before any code is written or run.
-     This is a prediction, not yet a fact — nothing here has been observed to be true. 
-     
-It must be in the following form:
+context: ""   # OPTIONAL: brief note only, e.g. an ordering change and why. Never lengthy prose.
 
-- [ ] _Task name_. Short plan description and prediction of work.
-     - [RULE] {{ the rule this implements}}
-
-A task may include multiple rules.
-
-As you implement, fill in a posteriori points only after empirical verification —
-never from intention or memory of what should have happened. Altered shape:
-     
-- [ ] _Task name_. Short plan description and prediction of work.
-     - [RULE] {{ the rule this implements}}
-          - [AMND] {{ OPTIONAL: the amendmend due to factual inconsistencies }}
-     - [IMPL] {{ implemented in (file/location) }}
-          - [VERI] {{ tested by, enforced by, etc.}}
-
-Omit [AMND] where the rule needed no correction.
-A task may include multiple rules, and a rule may include multiple amendments. 
-A task may also include multiple implementations, and an implementation may include
-multiple modes of verification (tests, integration tests, etc.).
-
--->
-
+tasks:
+  - id: TASK-1
+    name: "<short title>"
+    plan: "<short plan description and prediction of work>"
+    rulesets: [RULESET-1]   # ids from the spec; use RULESET-2.1 to target a single rule in a multi-rule cluster
+    status: PENDING          # PENDING | IMPLEMENTED | VERIFIED
+    impl: []
+    verification: []
+    amendments: []
+  # add TASK-2, TASK-3... one per ruleset, or split further if a ruleset needs multiple tasks. Add an empty line between tasks.
 ```
 
-When every task's checkbox is checked, report a summary to the user. Ask for confirmation before considering the feature done.
+Populated shape, after work (a task may have multiple `impl` locations and multiple `verification` entries — unit, integration, e2e, type-check, etc. — and a task may cover multiple rulesets):
+
+```yaml
+impl_name: IMPL_user-avatar-upload
+
+context: ""
+
+tasks:
+  - id: TASK-1
+    name: "Reject oversized uploads"
+    plan: "Add size check in upload handler, return 413 with error body"
+    rulesets: [RULESET-1]
+    status: VERIFIED
+    impl:
+      - location: "src/upload/validate.ts"
+    verification:
+      - method: unit_test
+        location: "tests/upload/validate.test.ts"
+        result: pass
+    amendments:
+      - text: "Spec assumed client sends MIME type; observed some clients omit it — added sniffing fallback."
+
+  - id: TASK-2
+    name: "Clamp out-of-bounds crop coordinates"
+    plan: "Clamp crop box to image bounds; log a telemetry warning when clamped"
+    rulesets: [RULESET-2]
+    status: IMPLEMENTED
+    impl:
+      - location: "src/upload/crop.ts"
+    verification: []
+    amendments: []
+```
+
+When every task's `status` is `VERIFIED`, report a summary to the user. Ask for confirmation before considering the feature done.

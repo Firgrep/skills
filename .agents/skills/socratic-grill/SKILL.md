@@ -23,50 +23,51 @@ Finding _facts_ is your job, never the user's. When a frontier question needs a 
 
 The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
 
-Finally, revisit the business problem and ask the user if the plan adequately responds to it. If it does, move over to measureable outcomes and discuss how these can be measured, what validation, strict typing or tests we can have to ensure the quality of the new feature. 
+Finally, revisit the business problem and ask the user if the plan adequately responds to it. If it does, move over to measurable outcomes and discuss how these can be measured, what validation, strict typing or tests we can have to ensure the quality of the new feature.
 
-Produce the specification using the following template, populated from the information gathered above. Write it to `.dev/SPEC_{{ spec_name }}.md` — a working file scoped to the current branch, not a committed artifact. Ensure `.dev/` is covered by `.gitignore`; add an entry if it isn't. If the file already exists (e.g. from a prior session), treat it as the current source of truth and update it in place rather than starting over.
+Produce the specification as YAML, populated from the information gathered above. Write it to `.dev/SPEC_{{ spec_name }}.yaml`, a working file scoped to the current branch, not a committed artifact. Ensure `.dev/` is covered by `.gitignore`; add an entry if it isn't. If the file already exists (e.g. from a prior session), treat it as the current source of truth and update it in place rather than starting over.
 
-```md
-# <spec_name>
+A requirements entry is a ruleset: a cluster of one or more scenarios and one or more rules, where every rule in the cluster applies to every scenario in it. Give each ruleset a stable id (RULESET-1, RULESET-2, ...). If kantian-implementation or the user needs to reference a single rule within a multi-rule ruleset, address it as RULESET-<n>.<rule-index> (1-based index into that ruleset's rules list).
 
-## 1. Business Case
+```yaml
+spec_name: <feature-name>
+status: DRAFT   # DRAFT | CONFIRMED | SUPERSEDED
 
-### 1.1 Summary
+business_case:
+  summary: >-
+    <One paragraph summarizing the feature and its business utility.>
+  not_building: >-
+    <OPTIONAL: what is explicitly NOT being built, if relevant.>
+  outcomes:
+    - id: OUT-1
+      description: "<short non-technical description>"
+      metric: <what is measured>
+      validation: <how it's checked, e.g. analytics_event, load_test, type_check>
+      # add OUT-2, OUT-3... one per falsifiable outcome. Add an empty line between outcome objects.
 
-<!-- One paragraph summarizing the feature and its business utility.
-     Include what is NOT being built if necessary. -->
+decisions:
+  accepted:
+    - id: DEC-1
+      summary: "<short or long description>"
+      facts: []   # OPTIONAL: self-standing facts, e.g. paths, e.g. ["uploads/avatars/"]
+      # add DEC-2, DEC-3... Add an empty line between accepted decisions.
+  rejected:
+    - id: DEC-R1
+      summary: "<significant alternative that was rejected>"
+      reason: "<succinct explanation why>"
+      facts: []   # OPTIONAL
+      # add DEC-R2, DEC-R3... Add an empty line between rejected decisions.
 
-### 1.2 Falsifiable Outcomes
-
-<!--
-- Bullet points with short non-technical descriptions
-    - Nested sub-points indicate technical items
--->
-
-## 2. Decisions
-
-### 2.1 Accepted Decisions
-
-<!--
-- Bullet points with short or long descriptions. (Include facts in self-standing parenthesis with details if necessary, e.g. `paths/to/life`).
--->
-
-### 2.2 Rejected Decisions
-
-<!--
-- Bullet points with descriptions of significant alternatives rejected with a succinct explanation why. (Include facts in self-standing parenthesis with details if necessary, e.g. `paths/to/life`.)
--->
-
-## 3. Requirements
-
-<!--
-We emulate Gherkin's Rule keyword (from Cucumber), where one Rule is illustrated by multiple Example/Scenario. Here Rules designate distilled functional behavior that work as checkable acceptance criterion.
-
-Create a table where one column defines user or event scenario, another column defining rule(s) that must necessarily follow from that/those scenarios.
-
-Leave cells with `"` to emulate spans, e.g. if a rule accounts for two scenarios, or one scenario accounts for two rules.
--->
+requirements:
+  - id: RULESET-1
+    scenarios:
+      - "<user or event scenario>"
+      # multiple scenarios if the same rules apply to all of them
+    rules:
+      - "<rule that must hold given the scenario(s) above>"
+      # multiple rules if this scenario-cluster implies more than one rule;
+      # reference an individual one later as RULESET-1.1, RULESET-1.2, etc.
+    # add RULESET-2, RULESET-3... Add an empty line between rulesets.
+```
 
 This document defines what and why. Sequencing, estimation, and task breakdown are out of scope here.
-```
