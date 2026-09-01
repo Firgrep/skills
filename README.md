@@ -2,19 +2,25 @@
 
 Firgrep's agentic skills playground.
 
-The `socratic-grill` is heavily inspired by [Matt Pocock's](https://github.com/mattpocock/skills), but with some additions to ground it in business expectations and product mindset as well as a more defined spec output. This is still being tested, so expect changes!
+## Quickstart
 
-## Layout
-
-`.agents/skills/` is the source of truth. `.claude/skills/` holds relative symlinks back to it, so Claude Code picks them up without duplicating content.
-
-Adding a skill:
+_Required. stow version 2.4.1. (previous versions likely work but have not been tested)._
 
 ```sh
-mkdir -p .agents/skills/<name>          # write SKILL.md here
-ln -s ../../.agents/skills/<name> .claude/skills/<name>
+   ./sync.sh
 ```
 
-Skills can also live outside this repo — symlink them into `~/.claude/skills/` to use them everywhere, or into another project's `.claude/skills/` to scope them there.
+> [!IMPORTANT]
+> `socratic-grill` writes specs to `.dev/SPEC_<name>.md` — working files scoped to the current branch, not committed artifacts. The skill adds `.dev/` to `.gitignore` on first run if it isn't there already. Change it if you need.
+
+## Comments
+
+The `socratic-grill` is heavily inspired by [Matt Pocock's](https://github.com/mattpocock/skills), but with some additions to ground it in business expectations and product mindset as well as a more defined spec output. This is still being tested, so expect changes!
+
+## Script Usage
+
+- `./sync.sh` (or `./sync.sh sync`): Links / restows all skills into `~/.config/opencode/skills/` and `~/.claude/skills/`.
+- `./sync.sh --dry-run`: Simulates the symlink operations without making changes.
+- `./sync.sh uninstall`: Unlinks/removes the symlinks from both locations.
 
 `socratic-grill` writes specs to `.dev/SPEC_<name>.md` — working files scoped to the current branch, not committed artifacts. The skill adds `.dev/` to `.gitignore` on first run if it isn't there already. Change it if you need.
