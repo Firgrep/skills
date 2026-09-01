@@ -22,5 +22,3 @@ The `socratic-grill` is heavily inspired by [Matt Pocock's](https://github.com/m
 - `./sync.sh` (or `./sync.sh sync`): Links / restows all skills into `~/.config/opencode/skills/` and `~/.claude/skills/`.
 - `./sync.sh --dry-run`: Simulates the symlink operations without making changes.
 - `./sync.sh uninstall`: Unlinks/removes the symlinks from both locations.
-
-`socratic-grill` writes specs to `.dev/SPEC_<name>.md` — working files scoped to the current branch, not committed artifacts. The skill adds `.dev/` to `.gitignore` on first run if it isn't there already. Change it if you need.
