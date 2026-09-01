@@ -64,7 +64,7 @@ tasks:
         location: "tests/upload/validate.test.ts"
         result: pass
     amendments:
-      - text: "Spec assumed client sends MIME type; observed some clients omit it — added sniffing fallback."
+      - note: "Spec assumed client sends MIME type; observed some clients omit it — added sniffing fallback."
 
   - id: TASK-2
     name: "Clamp out-of-bounds crop coordinates"
