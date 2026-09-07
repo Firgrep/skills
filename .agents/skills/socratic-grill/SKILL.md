@@ -25,7 +25,7 @@ The session is done when the frontier is empty: every branch of the design tree 
 
 Finally, revisit the business problem and ask the user if the plan adequately responds to it. If it does, move over to measurable outcomes and discuss how these can be measured, what validation, strict typing or tests we can have to ensure the quality of the new feature.
 
-Produce the specification as YAML, populated from the information gathered above. Write it to `.dev/SPEC_{{ spec_name }}.yaml`, a working file scoped to the current branch, not a committed artifact. Ensure `.dev/` is covered by `.gitignore`; add an entry if it isn't. If the file already exists (e.g. from a prior session), treat it as the current source of truth and update it in place rather than starting over.
+Produce the specification as YAML, populated from the information gathered above. Write it to `.localdev/SPEC_{{ spec_name }}.yaml`, a working file scoped to the current branch, not a committed artifact. Ensure `.localdev/` is covered by `.gitignore`; add an entry if it isn't. If the file already exists (e.g. from a prior session), treat it as the current source of truth and update it in place rather than starting over.
 
 A requirements entry is a ruleset: a cluster of one or more scenarios and one or more rules, where every rule in the cluster applies to every scenario in it. Give each ruleset a stable id (RULESET-1, RULESET-2, ...). If kantian-implementation or the user needs to reference a single rule within a multi-rule ruleset, address it as RULESET-<n>.<rule-index> (1-based index into that ruleset's rules list).
 

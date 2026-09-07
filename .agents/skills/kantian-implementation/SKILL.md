@@ -3,13 +3,13 @@ name: kantian-implementation
 description: Implement a feature from a settled spec, requirement by requirement, verifying each is implemented, tested, and enforced. Use after socratic-grill has produced a SPEC file, or when the user says 'build the spec' / 'implement the spec'.
 ---
 
-Read `.dev/SPEC_{{ spec_name }}.yaml`. This is the settled source of truth for *what* and *why*. Never re-litigate Decisions or Business Case; if something there seems wrong, always flag it to the user rather than silently overriding it.
+Read `.localdev/SPEC_{{ spec_name }}.yaml`. This is the settled source of truth for *what* and *why*. Never re-litigate Decisions or Business Case; if something there seems wrong, always flag it to the user rather than silently overriding it.
 
-Never edit the `.dev/SPEC_{{ spec_name }}.yaml`; your job is to implement an existing spec, never to change one. The specs are immutable. If facts surface during investigation or implementation that contest or contradict what is written in the spec, flag it to the user and ask for clarification. Put this clarification as an amendment in the implementation.
+Never edit the `.localdev/SPEC_{{ spec_name }}.yaml`; your job is to implement an existing spec, never to change one. The specs are immutable. If facts surface during investigation or implementation that contest or contradict what is written in the spec, flag it to the user and ask for clarification. Put this clarification as an amendment in the implementation.
 
-If `.dev/SPEC_{{ spec_name }}.yaml` does not exist, stop and tell the user to run `socratic-grill` first — there is no settled spec to implement against.
+If `.localdev/SPEC_{{ spec_name }}.yaml` does not exist, stop and tell the user to run `socratic-grill` first — there is no settled spec to implement against.
 
-If `.dev/IMPL_{{ spec_name }}.yaml` does not exist, create it from the spec's Requirements table. If it already exists, resume from it rather than starting over.
+If `.localdev/IMPL_{{ spec_name }}.yaml` does not exist, create it from the spec's Requirements table. If it already exists, resume from it rather than starting over.
 
 You now formulate an implementation report of how to implement the spec. Always dispatch one or several _faster, lightweight, smaller model_ sub-agents to explore and find facts about the codebase and any tools. Work the report **one task at a time**, in the order the spec's `requirements` list them, unless a requirement depends on scaffolding another one produces (e.g. shared types, a migration), in that case, do the dependency first and note the reorder as `context` in the implementation file.
 
@@ -19,7 +19,7 @@ Each task must minimally cover one ruleset (or a specific rule within one, e.g. 
 
 If implementing a task surfaces a gap, ambiguity, or conflict the spec didn't anticipate, never resolve it by assumption. Stop and put it to the user as a new question, the same way `socratic-grill` surfaces decisions. Log the resolution as an entry in that task's `amendments`.
 
-`.dev/IMPL_{{ spec_name }}.yaml` is a working file, git-ignored, scoped to the branch — same lifecycle as the spec. It is not a committed artifact.
+`.localdev/IMPL_{{ spec_name }}.yaml` is a working file, git-ignored, scoped to the branch — same lifecycle as the spec. It is not a committed artifact.
 
 Set a task's `status` to `VERIFIED` only once `impl` has at least one entry **and** `verification` has at least one entry with `result: pass` — never on the basis of code being written, or a test merely existing.
 
