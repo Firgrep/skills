@@ -5,4 +5,5 @@ test:
     for t in tests/*/run.sh; do
         bash "$t" || rc=1
     done
+    if [[ $rc -eq 0 ]]; then echo "✓ all tests passed"; else echo "✗ tests failed"; fi
     exit $rc
