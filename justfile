@@ -1,9 +1,8 @@
-# Run all skill tests
+# Run all skill tests (VERBOSE=1 for one line per test)
 test:
     #!/usr/bin/env bash
-    set -euo pipefail
+    rc=0
     for t in tests/*/run.sh; do
-        echo "==> $t"
-        bash "$t"
+        bash "$t" || rc=1
     done
-
+    exit $rc
