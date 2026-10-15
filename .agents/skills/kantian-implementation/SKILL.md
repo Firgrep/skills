@@ -77,4 +77,12 @@ tasks:
     amendments: []
 ```
 
+Every time you create or update the IMPL file, validate it against its spec:
+
+```sh
+bash ${CLAUDE_SKILL_DIR}/scripts/validate_impl.sh .localdev/IMPL_{{ spec_name }}.yaml .localdev/SPEC_{{ spec_name }}.yaml
+```
+
+The script prints `file:line: message` for each problem and exits non-zero. Besides the layout, it enforces the `VERIFIED`/`IMPLEMENTED` evidence rules above and that every spec ruleset (or every rule within it) is covered by a task. Fix every reported error and re-run until it exits 0, and never set a task to `VERIFIED` on the strength of a file that does not validate.
+
 When every task's `status` is `VERIFIED`, report a summary to the user. Ask for confirmation before considering the feature done.

@@ -1,0 +1,15 @@
+impl_name: IMPL_block-style
+tasks:
+  - id: TASK-1
+    name: "n"
+    plan: >-
+      A folded plan that mentions rulesets: and status: words
+      without confusing the parser.
+    rulesets:
+      - RULESET-1
+      - RULESET-2
+    status: IMPLEMENTED
+    impl:
+    - location: "src/a.ts"
+    verification: []
+    amendments: []

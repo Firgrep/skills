@@ -6,3 +6,4 @@ test:
         echo "==> $t"
         bash "$t"
     done
+

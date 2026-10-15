@@ -1,0 +1,48 @@
+impl_name: IMPL_rule-level
+context: "RULESET-2 split per rule; size check first because persistence depends on it."
+tasks:
+  - id: TASK-1
+    name: "Store avatars"
+    plan: "p"
+    rulesets: [RULESET-1]
+    status: VERIFIED
+    impl:
+      - location: "src/a.ts"
+      - location: "src/b.ts"
+    verification:
+      - method: unit_test
+        location: "tests/a.test.ts"
+        result: pass
+      - method: type_check
+        location: "tsconfig.json"
+        result: pass
+    amendments: []
+
+  - id: TASK-2
+    name: "Size error"
+    plan: "p"
+    rulesets: [RULESET-2.1]
+    status: VERIFIED
+    impl:
+      - location: "src/c.ts"
+    verification:
+      - method: unit_test
+        location: "tests/c.test.ts"
+        result: fail
+      - method: integration_test
+        location: "tests/c.int.ts"
+        result: pass
+    amendments: []
+
+  - id: TASK-3
+    name: "Nothing persisted"
+    plan: "p"
+    rulesets: [RULESET-2.2]
+    status: IMPLEMENTED
+    impl:
+      - location: "src/d.ts"
+    verification:
+      - method: manual
+        location: "docs/risk.md"
+        result: accepted_risk
+    amendments: []

@@ -1,0 +1,29 @@
+# expect: field "plan" is empty
+impl_name: IMPL_user-avatar-upload
+
+context: ""
+
+tasks:
+  - id: TASK-1
+    name: "Store uploaded avatars"
+    plan: "Save PNG/JPEG under 5 MB to object storage and show on profile"
+    rulesets: [RULESET-1]
+    status: VERIFIED
+    impl:
+      - location: "src/upload/store.ts"
+    verification:
+      - method: unit_test
+        location: "tests/upload/store.test.ts"
+        result: pass
+    amendments:
+      - note: "Spec assumed client sends MIME type; observed some clients omit it — added sniffing fallback."
+
+  - id: TASK-2
+    name: "Reject oversized uploads"
+    plan: ""
+    rulesets: [RULESET-2]
+    status: IMPLEMENTED   # PENDING | IMPLEMENTED | VERIFIED
+    impl:
+      - location: "src/upload/validate.ts"
+    verification: []
+    amendments: []

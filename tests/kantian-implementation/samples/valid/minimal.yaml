@@ -1,0 +1,10 @@
+impl_name: IMPL_min
+tasks:
+  - id: TASK-1
+    name: n
+    plan: p
+    rulesets: [RULESET-1, RULESET-2]
+    status: PENDING
+    impl: []
+    verification: []
+    amendments: []

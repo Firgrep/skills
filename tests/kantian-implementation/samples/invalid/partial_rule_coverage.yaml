@@ -1,0 +1,29 @@
+# expect: RULESET-2 from the spec is not covered
+impl_name: IMPL_user-avatar-upload
+
+context: ""
+
+tasks:
+  - id: TASK-1
+    name: "Store uploaded avatars"
+    plan: "Save PNG/JPEG under 5 MB to object storage and show on profile"
+    rulesets: [RULESET-1]
+    status: VERIFIED
+    impl:
+      - location: "src/upload/store.ts"
+    verification:
+      - method: unit_test
+        location: "tests/upload/store.test.ts"
+        result: pass
+    amendments:
+      - note: "Spec assumed client sends MIME type; observed some clients omit it — added sniffing fallback."
+
+  - id: TASK-2
+    name: "Reject oversized uploads"
+    plan: "Add size check in upload handler, return 413 with error body"
+    rulesets: [RULESET-1, RULESET-2.1]
+    status: IMPLEMENTED   # PENDING | IMPLEMENTED | VERIFIED
+    impl:
+      - location: "src/upload/validate.ts"
+    verification: []
+    amendments: []
