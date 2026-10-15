@@ -1,0 +1,19 @@
+# expect: does not match filename
+spec_name: tiny
+status: CONFIRMED
+business_case:
+  summary: One line.
+  outcomes:
+    - id: OUT-1
+      description: d
+      metric: m
+      validation: v
+decisions:
+  accepted: []
+  rejected: []
+requirements:
+  - id: RULESET-1
+    scenarios:
+      - s
+    rules:
+      - r

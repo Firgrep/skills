@@ -70,4 +70,12 @@ requirements:
     # add RULESET-2, RULESET-3... Add an empty line between rulesets.
 ```
 
+After writing or updating the file, validate it:
+
+```sh
+bash ${CLAUDE_SKILL_DIR}/scripts/validate_spec.sh .localdev/SPEC_{{ spec_name }}.yaml
+```
+
+The script prints `file:line: message` for each problem and exits non-zero. Fix every reported error in the file and re-run until it exits 0. Never tell the user the spec is ready before it passes.
+
 This document defines what and why. Sequencing, estimation, and task breakdown are out of scope here.

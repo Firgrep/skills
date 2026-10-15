@@ -1,0 +1,50 @@
+# expect: must match DEC-R<n>
+spec_name: avatar-upload
+status: DRAFT   # DRAFT | CONFIRMED | SUPERSEDED
+
+business_case:
+  summary: >-
+    Let users upload a profile avatar so teams recognise each other,
+    raising profile completion.
+  not_building: >-
+    Cropping UI.
+  outcomes:
+    - id: OUT-1
+      description: "More users have an avatar"
+      metric: share of active users with avatar
+      validation: analytics_event
+
+    - id: OUT-2
+      description: "Uploads stay fast"
+      metric: p95 upload latency under 2s
+      validation: load_test
+
+decisions:
+  accepted:
+    - id: DEC-1
+      summary: "Store avatars in object storage"
+      facts: ["uploads/avatars/"]
+
+    - id: DEC-2
+      summary: "Max file size is 5 MB"
+      facts: []
+  rejected:
+    - id: DEC-1x
+      summary: "Store avatars in the database"
+      reason: "Bloats backups"
+      facts: []
+
+requirements:
+  - id: RULESET-1
+    scenarios:
+      - "User uploads a PNG under 5 MB"
+      - "User uploads a JPEG under 5 MB"
+    rules:
+      - "The avatar is stored and shown on the profile"
+
+  - id: RULESET-2
+    scenarios:
+      - "User uploads a file over 5 MB"
+    rules:
+      - "The upload is rejected with a size error"
+      - "No file is persisted"
