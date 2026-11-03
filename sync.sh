@@ -11,11 +11,6 @@ OPENCODE_TARGET="${OPENCODE_BASE}/skills"
 CLAUDE_BASE="${CLAUDE_BASE:-${HOME}/.claude}"
 CLAUDE_TARGET="${CLAUDE_BASE}/skills"
 
-if ! command -v stow >/dev/null 2>&1; then
-  echo "Error: GNU stow is not installed or not in PATH." >&2
-  exit 1
-fi
-
 if [[ ! -d "${PACKAGE_DIR}/${PACKAGE_NAME}" ]]; then
   echo "Error: Source package '${PACKAGE_DIR}/${PACKAGE_NAME}' does not exist." >&2
   exit 1
@@ -26,7 +21,8 @@ show_help() {
 Usage: $(basename "$0") [command] [options]
 
 Commands:
-  sync, restow (default)   Link/re-link all skills to detected targets
+  sync, restow (default)   Link/re-link all skills to detected targets (uses stow)
+  copy, install            Copy all skills into detected targets as real files (no stow)
   unstow, remove           Remove symlinks from detected targets
   help                     Show this help message
 
@@ -38,17 +34,22 @@ EOF
 
 ACTION="sync"
 STOW_FLAGS=("-v")
+DRY_RUN=0
 
 for arg in "$@"; do
   case "$arg" in
     sync|restow)
       ACTION="sync"
       ;;
+    copy|install)
+      ACTION="copy"
+      ;;
     unstow|remove|delete)
       ACTION="unstow"
       ;;
     -n|--dry-run|--simulate)
       STOW_FLAGS+=("-n")
+      DRY_RUN=1
       ;;
     -v|--verbose)
       STOW_FLAGS+=("-v")
@@ -64,6 +65,11 @@ for arg in "$@"; do
       ;;
   esac
 done
+
+if [[ "$ACTION" != "copy" ]] && ! command -v stow >/dev/null 2>&1; then
+  echo "Error: GNU stow is not installed or not in PATH. Use '$(basename "$0") copy' to install without it." >&2
+  exit 1
+fi
 
 TARGETS=()
 
@@ -86,6 +92,8 @@ fi
 
 if [[ "$ACTION" == "sync" ]]; then
   echo "==> Syncing skills..."
+elif [[ "$ACTION" == "copy" ]]; then
+  echo "==> Copying skills..."
 else
   echo "==> Removing skill symlinks..."
 fi
@@ -95,8 +103,39 @@ for entry in "${TARGETS[@]}"; do
   TARGET="${entry#*:}"
 
   echo "--- ${NAME} (${TARGET}) ---"
-  if [[ "$ACTION" == "sync" ]]; then
-    mkdir -p "$TARGET"
+  if [[ "$ACTION" == "copy" ]]; then
+    if [[ -L "$TARGET" ]]; then
+      echo "ERROR: ${TARGET} is a symlink, not a real directory. Remove it and re-run." >&2
+      exit 1
+    fi
+    if [[ "$DRY_RUN" -eq 0 ]]; then mkdir -p "$TARGET"; fi
+    for src in "${PACKAGE_DIR}/${PACKAGE_NAME}"/*/; do
+      skill="$(basename "$src")"
+      dest="${TARGET}/${skill}"
+      if [[ "$DRY_RUN" -eq 1 ]]; then
+        echo "COPY: ${skill} => ${dest}"
+        continue
+      fi
+      # Replace any previous copy or stow symlink; never write through a symlink into the repo.
+      if [[ -L "$dest" ]]; then rm "$dest"; else rm -rf "$dest"; fi
+      cp -R "$src" "$dest"
+      echo "COPIED: ${skill} => ${dest}"
+    done
+  elif [[ "$ACTION" == "sync" ]]; then
+    # The target must be a real directory before stowing. If it is a symlink
+    # (e.g. an earlier stow folded it into this repo), or missing, stow would
+    # link the whole directory and later installs would write into the repo.
+    if [[ -L "$TARGET" ]]; then
+      echo "ERROR: ${TARGET} is a symlink, not a real directory. Remove it and re-run." >&2
+      exit 1
+    fi
+    if [[ ! -d "$TARGET" ]]; then
+      if [[ "$DRY_RUN" -eq 1 ]]; then
+        echo "WOULD CREATE: ${TARGET}"
+        continue
+      fi
+      mkdir -p "$TARGET"
+    fi
     stow "${STOW_FLAGS[@]}" -R -d "$PACKAGE_DIR" -t "$TARGET" "$PACKAGE_NAME"
   else
     if [[ -d "$TARGET" ]]; then

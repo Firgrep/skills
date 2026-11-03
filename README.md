@@ -24,5 +24,6 @@ The `struct-spec` is heavily inspired by [Matt Pocock's](https://github.com/matt
 ## Script Usage
 
 - `./sync.sh` (or `./sync.sh sync`): Links / restows all skills into `~/.config/opencode/skills/` and `~/.claude/skills/`.
+- `./sync.sh copy` (or `just install`): Copies the skills into the same locations as real files, without stow. Re-run it to update; it replaces earlier copies and stow symlinks of the same skills.
 - `./sync.sh --dry-run`: Simulates the symlink operations without making changes.
 - `./sync.sh uninstall`: Unlinks/removes the symlinks from both locations.

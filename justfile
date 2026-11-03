@@ -11,3 +11,7 @@ test:
 # Link all skills into ~/.claude/skills and ~/.config/opencode/skills (pass --dry-run to preview)
 sync *args:
     ./sync.sh {{ args }}
+
+# Copy all skills as real files (no stow); pass --dry-run to preview
+install *args:
+    ./sync.sh copy {{ args }}
