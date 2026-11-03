@@ -1,4 +1,4 @@
-# Validates a kantian-implementation IMPL yaml and cross-checks it against the
+# Validates a struct-impl IMPL yaml and cross-checks it against the
 # SPEC it implements. Line-oriented: relies on the fixed layout described in
 # SKILL.md rather than parsing YAML in general.
 #

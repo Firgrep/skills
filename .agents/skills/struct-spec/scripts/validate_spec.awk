@@ -1,4 +1,4 @@
-# Validates a socratic-grill SPEC yaml. Line-oriented: relies on the fixed
+# Validates a struct-spec SPEC yaml. Line-oriented: relies on the fixed
 # layout described in SKILL.md rather than parsing YAML in general.
 #
 # Variables (-v): file  path of the spec, for messages

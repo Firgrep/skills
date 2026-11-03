@@ -1,6 +1,6 @@
 ---
-name: socratic-grill
-description: Grill the user relentlessly about a plan, decision, or idea — Socratic in that questions, not answers, expose the unexamined assumptions and leave every decision yours. Use when the user wants to stress-test their thinking, or uses any 'grill', or 'spec' trigger phrases.
+name: struct-spec
+description: Interview the user about a plan, decision, or idea until every decision is settled, then write a validated, structured SPEC file. Use when the user wants to stress-test their thinking, or uses any 'grill', 'interview' or 'spec' trigger phrases.
 ---
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it. Start straight away on the matter at hand, with the first frontier round.
@@ -27,7 +27,7 @@ Finally, discuss what validation, strict typing or tests we can have to ensure t
 
 Produce the specification as YAML, populated from the information gathered above. Write it to `.localdev/SPEC_{{ spec_name }}.yaml`, a working file scoped to the current branch, not a committed artifact. Ensure `.localdev/` is covered by `.gitignore`; add an entry if it isn't. If the file already exists (e.g. from a prior session), treat it as the current source of truth and update it in place rather than starting over.
 
-A requirements entry is a ruleset: a cluster of one or more scenarios and one or more rules, where every rule in the cluster applies to every scenario in it. Give each ruleset a stable id (RULESET-1, RULESET-2, ...). If kantian-implementation or the user needs to reference a single rule within a multi-rule ruleset, address it as RULESET-<n>.<rule-index> (1-based index into that ruleset's rules list).
+A requirements entry is a ruleset: a cluster of one or more scenarios and one or more rules, where every rule in the cluster applies to every scenario in it. Give each ruleset a stable id (RULESET-1, RULESET-2, ...). If struct-impl or the user needs to reference a single rule within a multi-rule ruleset, address it as RULESET-<n>.<rule-index> (1-based index into that ruleset's rules list).
 
 ```yaml
 spec_name: <feature-name>

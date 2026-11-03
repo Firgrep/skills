@@ -1,13 +1,13 @@
 ---
-name: kantian-implementation
-description: Implement a feature from a settled spec, requirement by requirement, verifying each is implemented, tested, and enforced. Use after socratic-grill has produced a SPEC file, or when the user says 'build the spec' / 'implement the spec'.
+name: struct-impl
+description: Implement a feature from a settled spec, requirement by requirement, verifying each is implemented, tested, and enforced. Use after struct-spec has produced a SPEC file, or when the user says 'implement the spec'.
 ---
 
 Read `.localdev/SPEC_{{ spec_name }}.yaml`. This is the settled source of truth for *what* and *why*. Never re-litigate Decisions or Business Case; if something there seems wrong, always flag it to the user rather than silently overriding it.
 
 Never edit the `.localdev/SPEC_{{ spec_name }}.yaml`; your job is to implement an existing spec, never to change one. The specs are immutable. If facts surface during investigation or implementation that contest or contradict what is written in the spec, flag it to the user and ask for clarification. Put this clarification as an amendment in the implementation.
 
-If `.localdev/SPEC_{{ spec_name }}.yaml` does not exist, stop and tell the user to run `socratic-grill` first — there is no settled spec to implement against.
+If `.localdev/SPEC_{{ spec_name }}.yaml` does not exist, stop and tell the user to run `struct-spec` first — there is no settled spec to implement against.
 
 If `.localdev/IMPL_{{ spec_name }}.yaml` does not exist, create it from the spec's Requirements table. If it already exists, resume from it rather than starting over.
 
@@ -17,7 +17,7 @@ Each task must minimally cover one ruleset (or a specific rule within one, e.g. 
 1. **Implement** the behavior the referenced rule(s) describe.
 2. **Verify** it: write a test asserting each scenario (Given/When/Then) tied to that ruleset, then *run* it — don't set `status: VERIFIED` until it actually passes. Dispatch a lightweight sub-agent to run the test suite and report results; don't assume a pass. Alternatively, check whether the guarantee is structural (types, validation, constraints) and not just behavior that happens to pass today. If it's only incidentally true, say so and either strengthen it or flag it as an accepted risk in a `verification` entry — never silently mark `VERIFIED` on a hope.
 
-If implementing a task surfaces a gap, ambiguity, or conflict the spec didn't anticipate, never resolve it by assumption. Stop and put it to the user as a new question, the same way `socratic-grill` surfaces decisions. Log the resolution as an entry in that task's `amendments`.
+If implementing a task surfaces a gap, ambiguity, or conflict the spec didn't anticipate, never resolve it by assumption. Stop and put it to the user as a new question, the same way `struct-spec` surfaces decisions. Log the resolution as an entry in that task's `amendments`.
 
 `.localdev/IMPL_{{ spec_name }}.yaml` is a working file, git-ignored, scoped to the branch — same lifecycle as the spec. It is not a committed artifact.
 

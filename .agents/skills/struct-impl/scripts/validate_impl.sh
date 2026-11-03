@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Validate a kantian-implementation IMPL yaml against the layout in SKILL.md and
+# Validate a struct-impl IMPL yaml against the layout in SKILL.md and
 # cross-check it against the SPEC it implements.
 # Pure bash + POSIX awk: no yq/python needed. The checks live in validate_impl.awk.
 #

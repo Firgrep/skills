@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Validate a socratic-grill SPEC yaml against the layout in SKILL.md.
+# Validate a struct-spec SPEC yaml against the layout in SKILL.md.
 # Pure bash + POSIX awk: no yq/python needed. The checks live in validate_spec.awk.
 #
 # Usage: validate_spec.sh <path/to/SPEC_name.yaml>

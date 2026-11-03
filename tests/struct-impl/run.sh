@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${here}/../lib/harness.sh"
-validator="${here}/../../.agents/skills/kantian-implementation/scripts/validate_impl.sh"
+validator="${here}/../../.agents/skills/struct-impl/scripts/validate_impl.sh"
 spec="${here}/samples/specs/SPEC_avatar.yaml"
 
 usage() { # label expected-exit args...
@@ -11,7 +11,7 @@ usage() { # label expected-exit args...
   else check_fail "usage/$label" "expected exit $want, got $got"; fi
 }
 
-suite_begin kantian-implementation
+suite_begin struct-impl
 usage no-args 2
 usage one-arg 2 "${here}/samples/valid/full.yaml"
 usage missing-impl 2 "${here}/samples/valid/nope.yaml" "$spec"

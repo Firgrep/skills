@@ -1,6 +1,6 @@
 # Skills
 
-Firgrep's agentic skills playground.
+Toolkit for more predictable and structured output from the LLM during planning and implementation.
 
 ## Quickstart
 
@@ -10,12 +10,16 @@ _Required. stow version 2.4.1. (previous versions likely work but have not been 
    ./sync.sh
 ```
 
+```sh
+    just sync # requires just task runner installed
+```
+
 > [!IMPORTANT]
-> `socratic-grill` writes specs to `.localdev/SPEC_<name>.yaml` — working files scoped to the current branch, not committed artifacts. The skill adds `.localdev/` to `.gitignore` on first run if it isn't there already. Change it if you need.
+> `struct-spec` writes specs to `.localdev/SPEC_<name>.yaml` — working files scoped to the current branch, not committed artifacts. The skill adds `.localdev/` to `.gitignore` on first run if it isn't there already. Change it if you need.
 
 ## Comments
 
-The `socratic-grill` is heavily inspired by [Matt Pocock's](https://github.com/mattpocock/skills), but with a more defined, validated YAML spec output. This is still being tested, so expect changes!
+The `struct-spec` is heavily inspired by [Matt Pocock's](https://github.com/mattpocock/skills), but with a more defined, validated YAML spec output.
 
 ## Script Usage
 

@@ -7,3 +7,7 @@ test:
     done
     if [[ $rc -eq 0 ]]; then echo "✓ all tests passed"; else echo "✗ tests failed"; fi
     exit $rc
+
+# Link all skills into ~/.claude/skills and ~/.config/opencode/skills (pass --dry-run to preview)
+sync *args:
+    ./sync.sh {{ args }}
