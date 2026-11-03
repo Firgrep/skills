@@ -11,11 +11,11 @@ _Required. stow version 2.4.1. (previous versions likely work but have not been 
 ```
 
 > [!IMPORTANT]
-> `socratic-grill` writes specs to `.dev/SPEC_<name>.md` — working files scoped to the current branch, not committed artifacts. The skill adds `.dev/` to `.gitignore` on first run if it isn't there already. Change it if you need.
+> `socratic-grill` writes specs to `.localdev/SPEC_<name>.yaml` — working files scoped to the current branch, not committed artifacts. The skill adds `.localdev/` to `.gitignore` on first run if it isn't there already. Change it if you need.
 
 ## Comments
 
-The `socratic-grill` is heavily inspired by [Matt Pocock's](https://github.com/mattpocock/skills), but with some additions to ground it in business expectations and product mindset as well as a more defined spec output. This is still being tested, so expect changes!
+The `socratic-grill` is heavily inspired by [Matt Pocock's](https://github.com/mattpocock/skills), but with a more defined, validated YAML spec output. This is still being tested, so expect changes!
 
 ## Script Usage
 

@@ -6,7 +6,7 @@
 #
 # Parser state
 #   section / subkey   current top-level / second-level key
-#   kind               item being read: outcome | accepted | rejected | ruleset
+#   kind               item being read: accepted | rejected | ruleset
 #   id, item_line      id and line of the current item
 #   field[k], field_line[k]   scalar fields seen in the current item
 #   items[k]           entries counted in the current item's scenarios / rules
@@ -88,11 +88,7 @@ function require_items(k) {
 }
 
 function check_item() {
-  if (kind == "outcome") {
-    n_outcomes++
-    if (id !~ /^OUT-[0-9]+$/) errat(item_line, "outcome id \"" id "\" must match OUT-<n>")
-    require_field("description"); require_field("metric"); require_field("validation")
-  } else if (kind == "accepted") {
+  if (kind == "accepted") {
     if (id !~ /^DEC-[0-9]+$/) errat(item_line, "accepted decision id \"" id "\" must match DEC-<n>")
     require_field("summary")
   } else if (kind == "rejected") {
@@ -116,7 +112,7 @@ function end_item() {
 
 
 function check_top_level() {
-  n = split("spec_name status business_case decisions requirements", required, " ")
+  n = split("spec_name status decisions requirements", required, " ")
   for (i = 1; i <= n; i++)
     if (!(required[i] in top_line)) errat(1, "missing top-level key \"" required[i] "\"")
 }
@@ -133,13 +129,6 @@ function check_header() {
     errat(status_line, "status \"" status "\" must be DRAFT, CONFIRMED or SUPERSEDED")
 }
 
-function check_business_case() {
-  if (!("business_case" in top_line)) return
-  if (summary == "") errat(top_line["business_case"], "business_case.summary is missing or empty")
-  check_placeholder(summary, summary_line, "business_case.summary")
-  if (n_outcomes < 1) errat(top_line["business_case"], "business_case.outcomes needs at least one outcome")
-}
-
 function check_decisions() {
   if (!("decisions" in top_line)) return
   if (!("accepted" in decision_line)) errat(top_line["decisions"], "decisions.accepted is missing")
@@ -154,7 +143,6 @@ function check_requirements() {
 function check_document() {
   check_top_level()
   check_header()
-  check_business_case()
   check_decisions()
   check_requirements()
 }
@@ -173,7 +161,6 @@ function on_second_key(   key) {
   end_item()
   key = key_of($0)
   subkey = key
-  if (section == "business_case" && key == "summary") { summary = value_of($0); summary_line = NR }
   if (section == "decisions") {
     if (key != "accepted" && key != "rejected")
       errat(NR, "unknown key \"" key "\" under decisions (expected accepted/rejected)")
@@ -183,11 +170,10 @@ function on_second_key(   key) {
 
 function on_item_start() {
   end_item()
-  if      (section == "business_case" && subkey == "outcomes") kind = "outcome"
-  else if (section == "decisions" && subkey == "accepted")     kind = "accepted"
+  if      (section == "decisions" && subkey == "accepted")     kind = "accepted"
   else if (section == "decisions" && subkey == "rejected")     kind = "rejected"
   else if (section == "requirements")                          kind = "ruleset"
-  else { errat(NR, "unexpected item outside outcomes/accepted/rejected/requirements"); return }
+  else { errat(NR, "unexpected item outside accepted/rejected/requirements"); return }
   id = value_of($0); item_line = NR; field_indent = indent($0) + 2
   if (id == "") errat(NR, "item has an empty id")
   check_placeholder(id, NR, "id")
@@ -231,5 +217,5 @@ is_blank_or_comment($0) { next }
 END {
   end_item()
   check_document()
-  finish(sprintf("OK: %s (%d outcomes, %d rulesets)", file, n_outcomes, n_rulesets))
+  finish(sprintf("OK: %s (%d rulesets)", file, n_rulesets))
 }

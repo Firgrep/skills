@@ -1,12 +1,5 @@
 spec_name: named
 status: CONFIRMED
-business_case:
-  summary: One line.
-  outcomes:
-    - id: OUT-1
-      description: d
-      metric: m
-      validation: v
 decisions:
   accepted: []
   rejected: []

@@ -3,7 +3,7 @@ name: socratic-grill
 description: Grill the user relentlessly about a plan, decision, or idea — Socratic in that questions, not answers, expose the unexamined assumptions and leave every decision yours. Use when the user wants to stress-test their thinking, or uses any 'grill', or 'spec' trigger phrases.
 ---
 
-Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it. Begin first with a short discussion to establish a baseline of _what_ business problem or case the requested feature is meant to solve and _what_ are the measurable outcomes. Keep in mind the business problem and outcomes for later.
+Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it. Start straight away on the matter at hand, with the first frontier round.
 
 Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Present the frontier as a numbered list in your message, but invoke the question tool once per item, in order (i.e. the round is batched conceptually, but delivery is serial): number each question and give your recommended answer. However, _if you have no strong basis for a recommendation_, **always say so plainly** rather than guessing. Then wait for the user's answers before the next round. Use whatever structured multiple-choice input mechanism is available to present options, and ask _only one question at a time_.
 
@@ -23,7 +23,7 @@ Finding _facts_ is your job, never the user's. When a frontier question needs a 
 
 The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
 
-Finally, revisit the business problem and ask the user if the plan adequately responds to it. If it does, move over to measurable outcomes and discuss how these can be measured, what validation, strict typing or tests we can have to ensure the quality of the new feature.
+Finally, discuss what validation, strict typing or tests we can have to ensure the quality of the new feature.
 
 Produce the specification as YAML, populated from the information gathered above. Write it to `.localdev/SPEC_{{ spec_name }}.yaml`, a working file scoped to the current branch, not a committed artifact. Ensure `.localdev/` is covered by `.gitignore`; add an entry if it isn't. If the file already exists (e.g. from a prior session), treat it as the current source of truth and update it in place rather than starting over.
 
@@ -32,18 +32,6 @@ A requirements entry is a ruleset: a cluster of one or more scenarios and one or
 ```yaml
 spec_name: <feature-name>
 status: DRAFT   # DRAFT | CONFIRMED | SUPERSEDED
-
-business_case:
-  summary: >-
-    <One paragraph summarizing the feature and its business utility.>
-  not_building: >-
-    <OPTIONAL: what is explicitly NOT being built, if relevant.>
-  outcomes:
-    - id: OUT-1
-      description: "<short non-technical description>"
-      metric: <what is measured>
-      validation: <how it's checked, e.g. analytics_event, load_test, type_check>
-      # add OUT-2, OUT-3... one per falsifiable outcome. Add an empty line between outcome objects.
 
 decisions:
   accepted:

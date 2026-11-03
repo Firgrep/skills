@@ -1,23 +1,6 @@
 spec_name: avatar-upload
 status: DRAFT   # DRAFT | CONFIRMED | SUPERSEDED
 
-business_case:
-  summary: >-
-    Let users upload a profile avatar so teams recognise each other,
-    raising profile completion.
-  not_building: >-
-    Cropping UI.
-  outcomes:
-    - id: OUT-1
-      description: "More users have an avatar"
-      metric: share of active users with avatar
-      validation: analytics_event
-
-    - id: OUT-2
-      description: "Uploads stay fast"
-      metric: p95 upload latency under 2s
-      validation: load_test
-
 decisions:
   accepted:
     - id: DEC-1
