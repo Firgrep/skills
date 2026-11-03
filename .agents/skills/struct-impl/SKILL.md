@@ -3,7 +3,7 @@ name: struct-impl
 description: Implement a feature from a settled spec, requirement by requirement, verifying each is implemented, tested, and enforced. Use after struct-spec has produced a SPEC file, or when the user says 'implement the spec'.
 ---
 
-Read `.localdev/SPEC_{{ spec_name }}.yaml`. This is the settled source of truth for *what* and *why*. Never re-litigate Decisions or Business Case; if something there seems wrong, always flag it to the user rather than silently overriding it.
+Read `.localdev/SPEC_{{ spec_name }}.yaml`. This is the settled source of truth for *what* and *why*. Never re-litigate its decisions; if something there seems wrong, always flag it to the user rather than silently overriding it.
 
 Never edit the `.localdev/SPEC_{{ spec_name }}.yaml`; your job is to implement an existing spec, never to change one. The specs are immutable. If facts surface during investigation or implementation that contest or contradict what is written in the spec, flag it to the user and ask for clarification. Put this clarification as an amendment in the implementation.
 
